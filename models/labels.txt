@@ -1,0 +1,4 @@
+BlackMeasles
+BlackRot
+HealthyGrapes
+LeafBlight

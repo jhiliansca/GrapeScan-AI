@@ -1,0 +1,47 @@
+# 🐍 Archivos de compilación de Python
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+
+# 💻 Entornos virtuales
+.venv/
+.venv_tf/
+venv/
+env/
+
+# 🧠 Archivos de modelos grandes (si no usas Git LFS)
+# Si usas Git LFS, NO ignores tus archivos .keras o .h5
+
+# 📊 Archivos de datos o logs generados localmente
+*.log
+*.csv
+*.json
+*.sqlite3
+
+# 🛠 Configuración del IDE (ej. VS Code)
+.vscode/
+.idea/# 🐍 Archivos de compilación de Python
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+
+# 💻 Entornos virtuales
+.venv/
+.venv_tf/
+venv/
+env/
+
+# 🧠 Archivos de modelos grandes (si no usas Git LFS)
+# Si usas Git LFS, NO ignores tus archivos .keras o .h5
+
+# 📊 Archivos de datos o logs generados localmente
+*.log
+*.csv
+*.json
+*.sqlite3
+
+# 🛠 Configuración del IDE (ej. VS Code)
+.vscode/
+.idea/

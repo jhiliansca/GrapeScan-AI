@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>🍇 GrapeScan AI – Analizador de Vides</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+        --gap: 24px;
+        --radius: 20px;
+        --bg-primary: #f0f7f4; 
+        --bg-secondary: #ffffff;
+        --leaf-green: #2d6a4f;
+        --bright-green: #52b788;
+        --soft-green: #d8f3dc;
+        --deep-purple: #491d88; /* Color uva */
+        --border-color: #e2e8f0; 
+        --text-color: #1b4332; 
+        --text-muted: #6c757d; 
+        --accent-grape: #7209b7;
+        --success: #2d6a4f;
+        --warning: #f39c12;
+        --error: #e63946;
+    }
+
+    body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        margin: 0;
+        background: var(--bg-primary);
+        background-image: radial-gradient(#d8f3dc 1px, transparent 1px);
+        background-size: 20px 20px;
+        color: var(--text-color);
+        line-height: 1.6;
+    }
+
+    header {
+        padding: 30px var(--gap);
+        background: var(--leaf-green);
+        color: white;
+        text-align: center;
+        border-bottom-left-radius: 40px;
+        border-bottom-right-radius: 40px;
+        box-shadow: 0 10px 25px rgba(45, 106, 79, 0.2);
+    }
+
+    header h1 { margin: 0; font-weight: 800; font-size: 28px; letter-spacing: -0.5px; }
+
+    main {
+        max-width: 1000px;
+        margin: -30px auto 40px;
+        padding: var(--gap);
+        display: grid;
+        gap: var(--gap);
+    }
+
+    .card {
+        background: var(--bg-secondary);
+        border: none;
+        border-radius: var(--radius);
+        padding: 25px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover { transform: translateY(-5px); }
+
+    .upload-section {
+        background: linear-gradient(135deg, #ffffff 0%, #f9fffb 100%);
+        border: 2px dashed var(--bright-green);
+    }
+
+    .row { display: flex; flex-wrap: wrap; gap: var(--gap); align-items: flex-end; }
+    
+    label { font-weight: 700; font-size: 14px; margin-bottom: 8px; display: block; color: var(--leaf-green); }
+
+    select, input[type="file"], button {
+        width: 100%;
+        padding: 14px;
+        border-radius: 12px;
+        border: 1px solid var(--soft-green);
+        font-family: inherit;
+        font-size: 15px;
+    }
+
+    input[type="file"] { background: white; cursor: pointer; }
+
+    button.primary {
+        background: var(--leaf-green);
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 4px 15px rgba(45, 106, 79, 0.3);
+    }
+
+    button.primary:hover { background: var(--bright-green); }
+
+    .preview-container {
+        text-align: center;
+        background: #f8f9fa;
+        border-radius: var(--radius);
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+    }
+
+    img.preview {
+        max-width: 100%;
+        max-height: 400px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .result-badge {
+        font-size: 1.8rem;
+        color: var(--leaf-green);
+        margin: 10px 0;
+        display: block;
+    }
+
+    table { width: 100%; margin-top: 15px; border-collapse: separate; border-spacing: 0 8px; }
+    th { text-align: left; padding: 10px; color: var(--text-muted); font-size: 12px; text-transform: uppercase; }
+    td { padding: 12px 10px; background: #fdfdfd; border-top: 1px solid #f1f1f1; border-bottom: 1px solid #f1f1f1; }
+    td:first-child { border-left: 1px solid #f1f1f1; border-radius: 10px 0 0 10px; font-weight: 600; }
+    td:last-child { border-right: 1px solid #f1f1f1; border-radius: 0 10px 10px 0; text-align: right; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); }
+
+    .pill {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 800;
+    }
+    .ok { background: #d8f3dc; color: #2d6a4f; }
+    .warn { background: #fff3cd; color: #856404; }
+
+    /* Estilo para los detalles de Gemini (Cards Didácticas) */
+    .gemini-detail-card {
+        border-top: 5px solid var(--accent-grape);
+    }
+    .gemini-detail-card h4 { 
+        margin: 0 0 10px 0; 
+        color: var(--accent-grape); 
+        display: flex; 
+        align-items: center; 
+        gap: 8px;
+    }
+
+    .loading-spinner {
+        width: 20px; height: 20px;
+        border: 3px solid rgba(255,255,255,0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        display: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🍇 GrapeScan AI <span id="health-pill" class="pill warn">Cargando...</span></h1>
+    <p style="opacity: 0.9; font-size: 14px;">Diagnóstico Inteligente de Cultivos de Uva</p>
+  </header>
+
+  <main>
+    <section class="card upload-section">
+      <div class="row">
+        <div style="flex: 1; min-width: 200px;">
+          <label>🌿 Inteligencia</label>
+          <select id="model">
+            <option value="inception">Inception v3 (Alta Precisión)</option>
+            <option value="baseline">Baseline (Rápido)</option>
+          </select>
+        </div>
+        <div style="flex: 2; min-width: 250px;">
+          <label>📸 Foto de la Hoja</label>
+          <input id="file" type="file" accept="image/*" />
+        </div>
+        <div style="flex: 1; min-width: 150px;">
+          <button id="btn-analyze" class="primary">
+            <div class="loading-spinner"></div>
+            <span id="btn-text">🔍 ANALIZAR</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid-2">
+      <section class="card">
+        <h3>🖼️ Vista de la Muestra</h3>
+        <div class="preview-container">
+            <img id="preview" class="preview" src="https://via.placeholder.com/400x300?text=Sube+una+foto+aquí" alt="Preview" />
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>📊 Diagnóstico</h3>
+        <div id="model-info" class="muted" style="font-size: 12px;"></div>
+        <div id="final-result" class="result-badge">Esperando imagen...</div>
+        <div id="confidence-info"></div>
+        
+        <div id="probs">
+            </div>
+      </section>
+    </div>
+
+    <section id="gemini-details-section" style="display:none;">
+        <h2 style="text-align:center; color: var(--leaf-green); margin: 30px 0 15px;">💡 Recomendaciones del Experto (IA)</h2>
+        <div class="grid-3">
+            <div id="symptoms-card" class="card gemini-detail-card">
+                <h4>🔍 Síntomas</h4>
+                <div id="symptoms-text" style="font-size: 14px;"></div>
+            </div>
+            <div id="cure-card" class="card gemini-detail-card" style="border-top-color: #2a9d8f;">
+                <h4>💊 Tratamiento</h4>
+                <div id="cure-text" style="font-size: 14px;"></div>
+            </div>
+            <div id="prevention-card" class="card gemini-detail-card" style="border-top-color: #e9c46a;">
+                <h4>🛡️ Prevención</h4>
+                <div id="prevention-text" style="font-size: 14px;"></div>
+            </div>
+        </div>
+    </section>
+  </main>
+
+  <script>
+    // Se mantiene la lógica original pero adaptada a los nuevos IDs
+    const $ = (s) => document.querySelector(s);
+    const fileInp = $('#file');
+    const preview = $('#preview');
+    const btnGo = $('#btn-analyze');
+    const btnText = $('#btn-text');
+    const spinner = $('.loading-spinner');
+
+    // Salud del sistema
+    (async () => {
+      try {
+        const r = await fetch('/health');
+        const j = await r.json();
+        const ok = j.labels_exists;
+        $('#health-pill').textContent = ok ? 'SISTEMA ACTIVO' : 'ERROR';
+        $('#health-pill').className = 'pill ' + (ok ? 'ok' : 'warn');
+      } catch (e) {
+        $('#health-pill').textContent = 'DESCONECTADO';
+      }
+    })();
+
+    // Preview de imagen
+    fileInp.addEventListener('change', () => {
+      const f = fileInp.files?.[0];
+      if (f) preview.src = URL.createObjectURL(f);
+    });
+
+    // Analizar
+    btnGo.addEventListener('click', async () => {
+      const f = fileInp.files?.[0];
+      if (!f) return alert('¡Sube una foto primero!');
+
+      btnGo.disabled = true;
+      spinner.style.display = 'block';
+      btnText.textContent = 'PROCESANDO...';
+
+      const form = new FormData();
+      form.append('file', f);
+
+      try {
+        const resp = await fetch(`/predict?model=${$('#model').value}`, { method:'POST', body: form });
+        const data = await resp.json();
+
+        if (resp.ok) {
+            $('#final-result').innerHTML = `<b>${data.final_prediction_message}</b>`;
+            $('#confidence-info').innerHTML = `<span class="pill ok">Confianza: ${(data.max_probability*100).toFixed(1)}%</span>`;
+            
+            // Tabla de probabilidades
+            let html = '<table><thead><tr><th>Clase</th><th>Match</th></tr></thead><tbody>';
+            Object.entries(data.probabilities).sort((a,b)=>b[1]-a[1]).forEach(([k,v]) => {
+                html += `<tr><td>${k}</td><td>${(v*100).toFixed(1)}%</td></tr>`;
+            });
+            $('#probs').innerHTML = html + '</tbody></table>';
+
+            // Mostrar Gemini
+            if(data.disease_details) {
+                $('#gemini-details-section').style.display = 'block';
+                $('#symptoms-text').innerHTML = data.disease_details.symptoms || 'No disponible';
+                $('#cure-text').innerHTML = data.disease_details.cure || 'No disponible';
+                $('#prevention-text').innerHTML = data.disease_details.prevention || 'No disponible';
+            }
+        }
+      } catch (e) {
+        alert('Error en el servidor');
+      } finally {
+        btnGo.disabled = false;
+        spinner.style.display = 'none';
+        btnText.textContent = '🔍 ANALIZAR';
+      }
+    });
+  </script>
+</body>
+</html>
