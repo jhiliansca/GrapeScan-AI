@@ -1,6 +1,8 @@
-**# 🍇 Uvas API — Clasificación de Enfermedades en Hojas de Vida
+**# # 🍇 GrapeScan AI — Clasificación de Enfermedades en Hojas de Uva
 
-Esta API permite **detectar enfermedades en hojas de uva** a partir de imágenes, utilizando **redes neuronales entrenadas en TensorFlow/Keras**.  
+**GrapeScan AI** es una API REST desarrollada con **FastAPI** y **TensorFlow/Keras** diseñada para detectar automáticamente enfermedades en hojas de uva a partir de imágenes digitales.
+
+Esta API permite **detectar enfermedades en hojas de uva** a partir de dichas imágenes, utilizando **redes neuronales entrenadas en TensorFlow/Keras**.  
 El proyecto incluye dos modelos de inteligencia artificial (IA) listos para producción:
 
 - 🧠 **Baseline model:** Red neuronal convolucional (CNN) entrenada desde cero.  
@@ -194,6 +196,10 @@ Invoke-RestMethod -Uri "http://127.0.0.1:8000/predict?model=baseline" -Method Po
 | `/predict` | POST | Clasifica una imagen de hoja | `file`, `model` |
 
 ---
+## 👩‍💻 Créditos y Autoría
+Desarrolladora: Jhiliansca (me)
 
-> ✨ **Uvas API** — Inteligencia Artificial aplicada al diagnóstico agrícola.
+Proyecto: GrapeScan AI — Diagnóstico Inteligente para la Agricultura
+
+Entrenamiento: Google Colab (GPU)
 **
