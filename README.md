@@ -178,7 +178,7 @@ Invoke-RestMethod -Uri "http://127.0.0.1:8000/predict?model=baseline" -Method Po
 
 ## 🧾Trabajo de Universidad
 
-- **Autora:** Jhilian Rosario Sejas Cavero  
+- **Autora:** JRS.  
 - **Framework:** [FastAPI](https://fastapi.tiangolo.com/)  
 - **IA:** TensorFlow / Keras  
 - **Dataset:** Imágenes de hojas de uva (sanas y enfermas) recolectadas desde Google Images  
