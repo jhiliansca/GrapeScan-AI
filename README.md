@@ -200,7 +200,7 @@ Invoke-RestMethod -Uri "http://127.0.0.1:8000/predict?model=baseline" -Method Po
 Desarrolladora: Jhiliansca (me)
 
 Proyecto: GrapeScan AI — Diagnóstico Inteligente para la Agricultura
-Proyecto universitario 
+Proyecto universitario para la materia de Inteligencia Artificial
 
 Entrenamiento: Google Colab (GPU)
 **
